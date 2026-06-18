@@ -1,4 +1,4 @@
-package com.example.productok.iu
+package com.example.productok.pantallas
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -17,21 +17,17 @@ fun PantallaIngreso(onNavigateToCatalogo: (String) -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Text("Bienvenido a StockPro", style = MaterialTheme.typography.headlineMedium)
-
         Spacer(modifier = Modifier.height(20.dp))
-
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
             label = { Text("Nombre del Operario") },
             modifier = Modifier.fillMaxWidth()
         )
-
         Spacer(modifier = Modifier.height(20.dp))
-
         Button(
             onClick = { onNavigateToCatalogo(nombre) },
-            enabled = nombre.length >= 3 // Validación exigida
+            enabled = nombre.length >= 3
         ) {
             Text("Ingresar al Sistema")
         }
