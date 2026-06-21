@@ -28,6 +28,18 @@ class MainActivity : ComponentActivity() {
                     composable("pantalla1") {
                         PantallaIngreso(onNavigateToCatalogo = { nombre ->
                             navController.navigate("pantalla2/$nombre")
+                            composable(
+                                route = "pantalla3/{id}",
+                                arguments = listOf(navArgument("id") { type = NavType.IntType })
+                            ) { backStackEntry ->
+                                val id = backStackEntry.arguments?.getInt("id") ?: 0
+                                PantallaDetalle(
+                                    productoId = id,
+                                    viewModel = viewModel,
+                                    onNavigateBack = { navController.popBackStack() }
+                                )
+                            }
+
                         })
                     }
 

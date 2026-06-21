@@ -20,14 +20,15 @@ class StockViewModel : ViewModel() {
     val productos: List<Producto> get() = _productos
 
     // 2. Funciones de negocio exigidas
-    fun actualizarStock(id: Int, cantidad: Int) {
+    fun actualizarStock(id: Int, nuevaCantidad: Int) {
         val index = _productos.indexOfFirst { it.id == id }
         if (index != -1) {
             val p = _productos[index]
-            // Creamos una nueva instancia del producto para que Compose detecte el cambio
-            _productos[index] = p.copy(stockActual = (p.stockActual + cantidad).coerceAtLeast(0))
+
+            _productos[index] = p.copy(stockActual = nuevaCantidad)
         }
     }
+
 
     fun calcularValorTotalInventario(): Double {
         return _productos.sumOf { it.precio * it.stockActual }
