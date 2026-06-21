@@ -36,10 +36,14 @@ fun PantallaCatalogo(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Aquí empieza tu LazyColumn original...
-        LazyColumn {
+       LazyColumn {
             items(productos) { prod ->
-                // ... (tu código de Card anterior)
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    onClick = { onNavigateToDetalle(prod.id) }
+                ) {
+                    Text("${prod.nombre} - Stock: ${prod.stockActual}", modifier = Modifier.padding(16.dp))
+                }
             }
         }
     }
