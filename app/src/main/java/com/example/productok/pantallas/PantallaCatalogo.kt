@@ -15,21 +15,31 @@ fun PantallaCatalogo(
     viewModel: StockViewModel,
     onNavigateToDetalle: (Int) -> Unit
 ) {
-    val productos = viewModel.productos // Lista reactiva
+    val productos = viewModel.productos
+
+    // Obtenemos los valores calculados
+    val totalInventario = viewModel.calcularValorTotalInventario()
+    val productosRiesgo = viewModel.obtenerProductosEnRiesgo()
+    val stockCero = viewModel.obtenerCantidadStockCero()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Bienvenido, $nombreOperario", style = MaterialTheme.typography.headlineSmall)
-        Spacer(modifier = Modifier.height(16.dp))
 
-        // LazyColumn es vital para listas en Compose
+        // Tarjeta de Resumen (Filtros/Datos)
+        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Total Inventario: $${"%.2f".format(totalInventario)}")
+                Text("Productos en riesgo (<5): ${productosRiesgo.size}")
+                Text("Productos agotados: $stockCero")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Aquí empieza tu LazyColumn original...
         LazyColumn {
             items(productos) { prod ->
-                Card(
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
-                    onClick = { onNavigateToDetalle(prod.id) }
-                ) {
-                    Text("${prod.nombre} - Stock: ${prod.stockActual}", modifier = Modifier.padding(16.dp))
-                }
+                // ... (tu código de Card anterior)
             }
         }
     }
