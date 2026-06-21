@@ -15,7 +15,7 @@ fun PantallaDetalle(
 ) {
     // Buscamos el producto en el ViewModel usando el ID recibido
     val producto = viewModel.productos.find { it.id == productoId }
-    var nuevoStock by remember { mutableStateOf(producto?.cantidad?.toString() ?: "0") }
+    var nuevoStock by remember { mutableStateOf(producto?.stockActual?.toString() ?: "0") }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         if (producto != null) {
@@ -31,12 +31,12 @@ fun PantallaDetalle(
 
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
-                // Actualizamos el dato en el ViewModel
                 viewModel.actualizarStock(producto.id, nuevoStock.toIntOrNull() ?: 0)
-                onNavigateBack() // Regresamos al catálogo
+                onNavigateBack()
             }) {
                 Text("Guardar Cambios")
             }
+
         } else {
             Text("Producto no encontrado")
         }

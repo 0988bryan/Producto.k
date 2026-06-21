@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.productok.pantallas.PantallaIngreso
 import com.example.productok.pantallas.PantallaCatalogo
+import com.example.productok.pantallas.PantallaDetalle
 import com.example.productok.viewmodel.StockViewModel
 import com.example.productok.ui.theme.ProductokTheme
 
@@ -28,18 +29,6 @@ class MainActivity : ComponentActivity() {
                     composable("pantalla1") {
                         PantallaIngreso(onNavigateToCatalogo = { nombre ->
                             navController.navigate("pantalla2/$nombre")
-                            composable(
-                                route = "pantalla3/{id}",
-                                arguments = listOf(navArgument("id") { type = NavType.IntType })
-                            ) { backStackEntry ->
-                                val id = backStackEntry.arguments?.getInt("id") ?: 0
-                                PantallaDetalle(
-                                    productoId = id,
-                                    viewModel = viewModel,
-                                    onNavigateBack = { navController.popBackStack() }
-                                )
-                            }
-
                         })
                     }
 
@@ -52,8 +41,20 @@ class MainActivity : ComponentActivity() {
                         PantallaCatalogo(
                             nombreOperario = nombre,
                             viewModel = viewModel,
-                            onNavigateToDetalle = { id: Int -> navController.navigate("pantalla3/$id") },
-                            onNavigateToReporte = { navController.navigate("pantalla4") }
+                            onNavigateToDetalle = { id -> navController.navigate("pantalla3/$id") }
+                        )
+                    }
+
+                    // Pantalla 3: Detalle (Ahora está fuera, donde corresponde)
+                    composable(
+                        route = "pantalla3/{id}",
+                        arguments = listOf(navArgument("id") { type = NavType.IntType })
+                    ) { backStackEntry ->
+                        val id = backStackEntry.arguments?.getInt("id") ?: 0
+                        PantallaDetalle(
+                            productoId = id,
+                            viewModel = viewModel,
+                            onNavigateBack = { navController.popBackStack() }
                         )
                     }
                 }
