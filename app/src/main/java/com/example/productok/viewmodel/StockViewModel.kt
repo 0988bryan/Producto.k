@@ -8,12 +8,12 @@ class StockViewModel : ViewModel() {
 
     // 1. Lista reactiva con 6 productos iniciales
     private val _productos = mutableStateListOf(
-        Producto(1, "Taladro", "Industrial", 50.0, 10),
-        Producto(2, "Martillo", "Manual", 15.0, 2),
-        Producto(3, "Sierra", "Corte", 120.0, 8),
-        Producto(4, "Destornillador", "Manual", 5.0, 3),
-        Producto(5, "Nivel", "Medición", 25.0, 0),
-        Producto(6, "Cinta Métrica", "Medición", 10.0, 12)
+        Producto(1, "Bondex Preg Intaco Premium", "Adhesivo premium", 15.50, 10),
+        Producto(2, "Bondex Preg Intaco Standard", "Adhesivo estándar", 12.00, 20),
+        Producto(3, "Groutex Gris Cálido", "Boquilla de alta resistencia", 8.75, 4), // Riesgo (<5)
+        Producto(4, "Maxiseal 3000", "Impermeabilizante", 45.00, 2), // Riesgo (<5)
+        Producto(5, "Maxisellador", "Sellador de superficies", 22.00, 0), // Stock Cero
+        Producto(6, "Malla Flex", "Malla de refuerzo", 30.00, 15)
     )
 
     // Exponemos la lista para que las pantallas la lean

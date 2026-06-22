@@ -14,6 +14,7 @@ import com.example.productok.pantallas.PantallaCatalogo
 import com.example.productok.pantallas.PantallaDetalle
 import com.example.productok.viewmodel.StockViewModel
 import com.example.productok.ui.theme.ProductokTheme
+import com.example.productok.pantallas.PantallaReporte
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +25,9 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 NavHost(navController = navController, startDestination = "pantalla1") {
-
+                    composable("pantalla4") {
+                        PantallaReporte(viewModel = viewModel, onNavigateBack = { navController.popBackStack() })
+                    }
                     // Pantalla 1: Ingreso
                     composable("pantalla1") {
                         PantallaIngreso(onNavigateToCatalogo = { nombre ->
@@ -38,10 +41,12 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(navArgument("nombre") { type = NavType.StringType })
                     ) { backStackEntry ->
                         val nombre = backStackEntry.arguments?.getString("nombre") ?: "Invitado"
+
                         PantallaCatalogo(
                             nombreOperario = nombre,
                             viewModel = viewModel,
-                            onNavigateToDetalle = { id -> navController.navigate("pantalla3/$id") }
+                            onNavigateToDetalle = { id -> navController.navigate("pantalla3/$id") },
+                            onNavigateToReporte = { navController.navigate("pantalla4") } // <--- ¡Y esta línea!
                         )
                     }
 

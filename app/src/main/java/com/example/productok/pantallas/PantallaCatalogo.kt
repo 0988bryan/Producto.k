@@ -13,36 +13,52 @@ import com.example.productok.viewmodel.StockViewModel
 fun PantallaCatalogo(
     nombreOperario: String,
     viewModel: StockViewModel,
-    onNavigateToDetalle: (Int) -> Unit
+    onNavigateToDetalle: (Int) -> Unit,
+    onNavigateToReporte: () -> Unit // Agregamos este parámetro necesario
 ) {
-    val productos = viewModel.productos
+    // 1. Estado de los filtros y datos
+    var mostrarSoloCriticos by remember { mutableStateOf(false) }
 
-    // Obtenemos los valores calculados
-    val totalInventario = viewModel.calcularValorTotalInventario()
-    val productosRiesgo = viewModel.obtenerProductosEnRiesgo()
-    val stockCero = viewModel.obtenerCantidadStockCero()
+    // 2. Filtramos la lista basándonos en el estado
+    val listaFiltrada = if (mostrarSoloCriticos) {
+        viewModel.obtenerProductosEnRiesgo()
+    } else {
+        viewModel.productos
+    }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Bienvenido, $nombreOperario", style = MaterialTheme.typography.headlineSmall)
-
-        // Tarjeta de Resumen (Filtros/Datos)
-        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Total Inventario: $${"%.2f".format(totalInventario)}")
-                Text("Productos en riesgo (<5): ${productosRiesgo.size}")
-                Text("Productos agotados: $stockCero")
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = onNavigateToReporte) {
+                Text("Reporte")
             }
         }
+    ) { padding ->
+        Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
+            Text("Operario: $nombreOperario", style = MaterialTheme.typography.headlineSmall)
 
-        Spacer(modifier = Modifier.height(8.dp))
+            // Filtros
+            Row(modifier = Modifier.padding(vertical = 8.dp)) {
+                Button(onClick = { mostrarSoloCriticos = false }) { Text("Ver Todo") }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = { mostrarSoloCriticos = true }) { Text("Stock Crítico") }
+            }
 
-       LazyColumn {
-            items(productos) { prod ->
-                Card(
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
-                    onClick = { onNavigateToDetalle(prod.id) }
-                ) {
-                    Text("${prod.nombre} - Stock: ${prod.stockActual}", modifier = Modifier.padding(16.dp))
+            // Lista (usando listaFiltrada)
+            LazyColumn {
+                items(listaFiltrada) { prod ->
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        onClick = { onNavigateToDetalle(prod.id) }
+                    ) {
+                        // Cambiamos el color a rojo si el stock es < 5
+                        val colorTexto = if (prod.stockActual < 5) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+
+                        Text(
+                            text = "${prod.nombre} - Stock: ${prod.stockActual}",
+                            modifier = Modifier.padding(16.dp),
+                            color = colorTexto
+                        )
+                    }
                 }
             }
         }
